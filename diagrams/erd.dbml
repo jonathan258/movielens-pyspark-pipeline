@@ -1,0 +1,47 @@
+// MovieLens 100K - Star Schema ERD
+// Tool: dbdiagram.io — paste this code there to visualize
+
+// ── FACT TABLE ────────────────────────────────
+Table FACT_RATINGS {
+  rating_id    int         [pk, increment, note: "Surrogate primary key"]
+  user_id      int         [ref: > DIM_USERS.user_id, note: "FK to DIM_USERS"]
+  movie_id     int         [ref: > DIM_MOVIES.movie_id, note: "FK to DIM_MOVIES"]
+  date_id      int         [ref: > DIM_DATE.date_id, note: "FK to DIM_DATE"]
+  rating       float       [note: "Rating value 1-5"]
+  unix_timestamp bigint    [note: "Raw Unix timestamp from source"]
+}
+
+// ── DIMENSION TABLES ──────────────────────────
+Table DIM_USERS {
+  user_id      int         [pk, note: "Natural key from source"]
+  age          int         [note: "User age"]
+  gender       varchar     [note: "M or F"]
+  occupation   varchar     [note: "User occupation"]
+  zip_code     varchar     [note: "User zip code"]
+}
+
+Table DIM_MOVIES {
+  movie_id     int         [pk, note: "Natural key from source"]
+  title        varchar     [note: "Movie title"]
+  release_year int         [note: "Extracted from title"]
+  release_date varchar     [note: "Full release date string"]
+  imdb_url     varchar     [note: "IMDB URL from source"]
+}
+
+Table DIM_DATE {
+  date_id      int         [pk, note: "Surrogate key YYYYMMDD format"]
+  full_date    date        [note: "Full date"]
+  day          int         [note: "Day of month"]
+  month        int         [note: "Month number"]
+  month_name   varchar     [note: "Month name e.g January"]
+  year         int         [note: "4 digit year"]
+  quarter      int         [note: "1-4"]
+  day_of_week  varchar     [note: "Monday, Tuesday etc"]
+  is_weekend   boolean     [note: "True if Saturday or Sunday"]
+}
+
+Table DIM_GENRES {
+  genre_id     int         [pk, increment, note: "Surrogate primary key"]
+  movie_id     int         [ref: > DIM_MOVIES.movie_id, note: "FK to DIM_MOVIES"]
+  genre_name   varchar     [note: "Genre e.g Action, Comedy"]
+}

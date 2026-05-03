@@ -1,0 +1,7 @@
+pyspark
+pandas
+google-cloud-bigquery
+google-cloud-storage
+python-dotenv
+configparser
+apache-airflow
